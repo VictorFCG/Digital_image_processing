@@ -1,8 +1,6 @@
 import sys
 import numpy as np
 import cv2
-import os
-import msvcrt
 
 # ===============================================================================
 
@@ -29,6 +27,9 @@ def media_ingenua(img, channels=1):  # channels = 3 para rgb
                 img_blurry[y, x, z] = total / win_area
 
     return img_blurry
+
+
+# ===============================================================================
 
 
 def media_separavel(img, channels=1):
@@ -68,6 +69,9 @@ def media_separavel(img, channels=1):
     return img_saida
 
 
+# ===============================================================================
+
+
 def integral(img, channels=1):
     w_range = int((window - 1) / 2)
     img_int = img.copy()
@@ -75,12 +79,12 @@ def integral(img, channels=1):
     win_area = window * window
     for z in range(channels):
         for y in range(1, img.shape[0]):
-            img_int[y, 0, z] = img_int[y - 1, 0, z] + img[y - 1, 0, z]
+            img_int[y, 0, z] = img_int[y - 1, 0, z] + img[y, 0, z]
         for x in range(1, img.shape[1]):
-            img_int[0, x, z] = img_int[0, x - 1, z] + img[0, x - 1, z]
+            img_int[0, x, z] = img_int[0, x - 1, z] + img[0, x, z]
         for y in range(1, img.shape[0]):
             for x in range(1, img.shape[1]):
-                img_int[y, x, z] = img_int[y - 1, x - 1, z] + img[y - 1, x - 1, z]
+                img_int[y, x, z] = img_int[y - 1, x - 1, z] + img[y, x, z]
 
     for z in range(channels):
         for y in range(w_range, img.shape[0]):
@@ -93,6 +97,9 @@ def integral(img, channels=1):
                 ) / win_area
 
     return img_blurry
+
+
+# ===============================================================================
 
 
 def main():
