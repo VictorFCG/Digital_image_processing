@@ -42,28 +42,25 @@ def media_separavel(img, channels=1):
         for y in range(img.shape[0]):
             fila = []
             total = 0
+            for x_win in range(1 + 2*x_range):
+                fila.append(img[y, x_win, z])
+                total += img[y, x_win, z]
             for x in range(x_range, img.shape[1] - x_range):
-                if x == x_range:
-                    for x_win in range(x - x_range, 1 + x + x_range):
-                        fila.append(img[y, x_win, z])
-                        total += img[y, x_win, z]
-                else:
-                    total -= fila.pop(0)
-                    total += img[y, x + x_range, z]
-                    fila.append(img[y, x + x_range, z])
+                total -= fila.pop(0)
+                total += img[y, x + x_range, z]
+                fila.append(img[y, x + x_range, z])
                 img_blurry[y, x, z] = total / window_x
+        
         for x in range(img.shape[1]):
             fila = []
             total = 0
+            for y_win in range(1 + 2*y_range):
+                fila.append(img_blurry[y_win, x, z])
+                total += img_blurry[y_win, x, z]
             for y in range(y_range, img.shape[0] - y_range):
-                if y == y_range:
-                    for y_win in range(y - y_range, 1 + y + y_range):
-                        fila.append(img_blurry[y_win, x, z])
-                        total += img_blurry[y_win, x, z]
-                else:
-                    total -= fila.pop(0)
-                    total += img_blurry[y + y_range, x, z]
-                    fila.append(img_blurry[y + y_range, x, z])
+                total -= fila.pop(0)
+                total += img_blurry[y + y_range, x, z]
+                fila.append(img_blurry[y + y_range, x, z])
                 img_saida[y, x, z] = total / window_y
 
     return img_saida
