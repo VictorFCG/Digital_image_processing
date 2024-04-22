@@ -3,7 +3,7 @@ import cv2
 
 threshold = 0.5 #para o brightpass
 sigma = 5
-kernel = 2*sigma #kernel
+kernel = (2*sigma) + 1 #kernel
 # ===============================================================================
 def exibir(img1, img2, img3):
     cv2.imshow("Original", img1)
@@ -42,7 +42,7 @@ def bloom_box(hls):
         mult=pow(2, i)
         boxblur=bpass
         for j in range(5):
-            boxblur = cv2.blur(boxblur, (mult*kernel, mult*kernel))
+            boxblur = cv2.blur(boxblur, (1+(mult*kernel), 1+(mult*kernel)))
         total += boxblur   
     total = np.where(total > 0.12, 0.12, total)
     canal_1 += total
