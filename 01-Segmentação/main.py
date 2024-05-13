@@ -52,28 +52,29 @@ def binariza(img, threshold):
 
 # -------------------------------------------------------------------------------
 def flood_fill(img, y, x, comp):
-    if img[y, x, 0] == 1:
-        img[y, x, 0] = comp["label"]
-        comp["n_pixels"] += 1
-        # atualiza coordenadas
-        # if y < comp["T"]:não precisa atualizar o topo
-        #    comp["T"] = y
-        if y > comp["B"]:
-            comp["B"] = y
-        if x > comp["R"]:
-            comp["R"] = x
-        if x < comp["L"]:
-            comp["L"] = x
-        # fim atualiza coordenadas e chama vizinhança 4
-        if (y - 1) >= 0:
-            flood_fill(img, y - 1, x, comp)  # cima
-        if (y + 1) < img.shape[0]:
-            flood_fill(img, y + 1, x, comp)  # baixo
-        if (x - 1) >= 0:
-            flood_fill(img, y, x - 1, comp)  # esquerda
-        if (x + 1) < img.shape[1]:
-            flood_fill(img, y, x + 1, comp)  # direita
-    # fim chama vizinhos
+    queue = [(y, x)]  # Inicializa uma fila com as coordenadas iniciais
+    while queue:
+        y, x = queue.pop(0)  # Retira o primeiro elemento da fila
+        if img[y, x, 0] == 1:
+            img[y, x, 0] = comp["label"]
+            comp["n_pixels"] += 1
+            # Atualiza coordenadas
+            if y > comp["B"]:
+                comp["B"] = y
+            if x > comp["R"]:
+                comp["R"] = x
+            if x < comp["L"]:
+                comp["L"] = x
+            # Adiciona vizinhos à fila
+            if (y - 1) >= 0:
+                queue.append((y - 1, x))  # Cima
+            if (y + 1) < img.shape[0]:
+                queue.append((y + 1, x))  # Baixo
+            if (x - 1) >= 0:
+                queue.append((y, x - 1))  # Esquerda
+            if (x + 1) < img.shape[1]:
+                queue.append((y, x + 1))  # Direita
+    
 
 
 # -------------------------------------------------------------------------------
