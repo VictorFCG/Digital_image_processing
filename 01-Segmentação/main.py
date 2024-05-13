@@ -111,6 +111,7 @@ def rotula(img, largura_min, altura_min, n_pixels_min):
                     "B": 0,
                     "R": 0,
                 }
+                label -= 1
                 flood_fill(img, y, x, comp)
                 # verificar
                 if (
@@ -120,7 +121,6 @@ def rotula(img, largura_min, altura_min, n_pixels_min):
                 ):
                     # append
                     lista.append(comp)
-            label -= 1
     return lista
 
 
