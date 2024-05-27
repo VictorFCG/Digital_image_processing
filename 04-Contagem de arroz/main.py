@@ -3,32 +3,20 @@ import cv2
 
 # ===============================================================================
 def flood_fill(img, y, x, comp):
-    '''if img[y, x] == 1:
-        img[y, x] = comp["label"]
-        comp["n_pixels"] += 1
-        
-        if (y - 1) >= 0:
-            flood_fill(img, y - 1, x, comp)  # cima
-        if (y + 1) < img.shape[0]:
-            flood_fill(img, y + 1, x, comp)  # baixo
-        if (x - 1) >= 0:
-            flood_fill(img, y, x - 1, comp)  # esquerda
-        if (x + 1) < img.shape[1]:
-            flood_fill(img, y, x + 1, comp)  # direita'''
-    stack = [(y, x)]
-    while stack:
-        y, x = stack.pop()
+    list = [(y, x)]
+    while list:
+        y, x = list.pop()
         if img[y, x] == 1:
             img[y, x] = comp["label"]
             comp["n_pixels"] += 1
             if (y - 1) >= 0:
-                stack.append((y - 1, x))  # cima
+                list.append((y - 1, x))  # cima
             if (y + 1) < img.shape[0]:
-                stack.append((y + 1, x))  # baixo
+                list.append((y + 1, x))  # baixo
             if (x - 1) >= 0:
-                stack.append((y, x - 1))  # esquerda
+                list.append((y, x - 1))  # esquerda
             if (x + 1) < img.shape[1]:
-                stack.append((y, x + 1))  # direita
+                list.append((y, x + 1))  # direita
 # -------------------------------------------------------------------------------
 def blob_list(img):
     flood_img = img.copy()
@@ -72,21 +60,19 @@ def count(img):
     comp_list_ordered = sorted(blob_list(img), key=lambda x: x["n_pixels"])
     comp_qt = len(comp_list_ordered)
     
-    index = int(comp_qt*0.4)
-    index_f = comp_qt-index
+    index = int(comp_qt*0.1)
+    index_f = comp_qt-4*index
     area = (comp_list_ordered[index_f]["n_pixels"] + comp_list_ordered[index]["n_pixels"])/2
 
     counter=0
-    blob_area=0
     for i in range(comp_qt):
         if comp_list_ordered[i]["n_pixels"] < area:
             counter += 1
         else:
-            blob_area += 1*comp_list_ordered[i]["n_pixels"]
+            counter += round(comp_list_ordered[i]["n_pixels"]/area)
         
     
-    estim = int(blob_area/(area))
-    return str(counter + estim)
+    return str(counter)
     
 # ===============================================================================
 def main():
