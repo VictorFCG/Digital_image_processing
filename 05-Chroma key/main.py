@@ -5,17 +5,21 @@ def mixBGFG(img, img_mask, bg_stretch):
     fg_img = np.copy(img)
     fg_img[:,:,1] -= (img_mask)
     max = np.max(img_mask)
-    bg_stretch/=(max)
+    ajustada = img_mask / max
+    #bg_stretch/=(max)
     for c in range(3): 
-        fg_img[:, :, c] = fg_img[:, :, c] * (1-img_mask) 
-        bg_stretch[:, :, c] = bg_stretch[:, :, c] * (img_mask)
+        fg_img[:, :, c] = fg_img[:, :, c] * (1-ajustada) 
+        bg_stretch[:, :, c] = bg_stretch[:, :, c] * (ajustada)
         
     img_final = fg_img + bg_stretch
     img_final = np.where(img_final > 1, 1, img_final) 
-    img_final = np.where(img_final < 0, 0, img_final) 
-             
-    cv2.imshow("teste 1", img_final)
+    #img_final = np.where(img_final < 0, 0, img_final) 
+    
+    cv2.imshow("Mascara ajustada", (1-ajustada))
+    cv2.waitKey()         
+    cv2.imshow("Final", img_final)
     cv2.waitKey()
+    cv2.destroyAllWindows()
 
 def maskCreate(img):
     #definindo áreas verdes
@@ -25,8 +29,6 @@ def maskCreate(img):
     #max = np.max(img_mask) Não usado
     img_mask = np.where(img_mask < 0, 0, img_mask)#/(max)
     img_mask = cv2.medianBlur(img_mask, (3))
-    cv2.imshow("teste 1", img_mask)
-    cv2.waitKey()
     
     return img_mask
 
@@ -45,7 +47,6 @@ def main():
         img_mask = maskCreate(img)
         mixBGFG(img, img_mask, bg_stretch)
         mixBGFG(img, img_mask, bg_stretch2)
-        cv2.destroyAllWindows()
     
     
 if __name__ == "__main__":
