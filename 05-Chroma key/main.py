@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import os.path
 
 
 def mixBGFG(img, img_mask, bg_stretch):
@@ -35,11 +36,11 @@ def maskCreate(img):
 
 
 def main():
-    bg = cv2.imread("img\\bg.jpg").astype(np.float32) / 255
-    bg2 = cv2.imread("img\\bg2.bmp").astype(np.float32) / 255
+    bg = cv2.imread(os.path.join('img','bg.jpg')).astype(np.float32) / 255
+    bg2 = cv2.imread(os.path.join('img','bg2.bmp')).astype(np.float32) / 255
 
     for i in range(9):
-        img_path = "img\\" + str(i) + ".bmp"
+        img_path = os.path.join("img", str(i) + ".bmp")
         img = cv2.imread(img_path).astype(np.float32) / 255
         h = img.shape[0]
         w = img.shape[1]
